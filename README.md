@@ -1,5 +1,7 @@
 # hosted [`here`](https://weather-app-phi-jade.vercel.app/)
 
+App checks what is the weather at your city.
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
