@@ -1,4 +1,4 @@
-# hosted [`here`](https://weather-app-phi-jade.vercel.app/)
+## hosted [`here`](https://weather-app-phi-jade.vercel.app/)
 
 App checks what is the weather at your city.
 
