@@ -1,0 +1,36 @@
+<script>
+	import "./../global.css";
+</script>
+
+<div class="layout-container">
+	<slot />
+</div>
+
+<style global>
+	.layout-container {
+		min-width: 100vw;
+		min-height: 100vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+	@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+	:root {
+		--bg-base: rgb(255, 149, 0);
+		--bg-light: rgb(243, 167, 61);
+		--text-neutral: rgb(25, 25, 25);
+		--text-light: rgb(100, 100, 100);
+		--text-lighter: rgb(200, 200, 200);
+		--text-white: rgb(245, 245, 245);
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		font-family: "Poppins", sans-serif;
+		font-size: 16px;
+		box-sizing: border-box;
+	}
+</style>
