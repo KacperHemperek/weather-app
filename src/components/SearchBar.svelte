@@ -11,9 +11,7 @@
 
 <form
 	on:submit|preventDefault={() => {
-		goto(`search/${value}`, {
-			replaceState: true
-		});
+		goto(`search/${value}`);
 	}}
 >
 	<div class="input-wrapper">
