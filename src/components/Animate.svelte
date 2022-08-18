@@ -6,7 +6,7 @@
 	<div
 		class="content-wrapper"
 		out:fly={{ duration: 300, x: -80 }}
-		in:fly={{ duration: 300, x: 80, delay: 400 }}
+		in:fly={{ duration: 300, x: 80, delay: 300 }}
 	>
 		<slot />
 	</div>
