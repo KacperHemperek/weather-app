@@ -5,8 +5,8 @@
 <div class="layout-container">
 	<div
 		class="content-wrapper"
-		out:fly={{ duration: 300, x: -80 }}
-		in:fly={{ duration: 300, x: 80, delay: 300 }}
+		out:fly={{ duration: 300, x: -100 }}
+		in:fly={{ duration: 300, x: 100, delay: 300 }}
 	>
 		<slot />
 	</div>
@@ -18,6 +18,7 @@
 		display: flex;
 		justify-content: center;
 		padding: 1rem;
+		overflow-x: hidden;
 	}
 
 	.content-wrapper {

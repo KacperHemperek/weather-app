@@ -7,7 +7,7 @@
 	export let wind: number | string;
 	export let loading: boolean | undefined = false;
 
-	let delay = 100;
+	let delay = 200;
 </script>
 
 <div class="card-grid">
