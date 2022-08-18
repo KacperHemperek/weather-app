@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { fly } from "svelte/transition";
 
-	import Card from "../components/Card.svelte";
 	import WeatherCards from "../components/WeatherCards.svelte";
+	import Animate from "../components/Animate.svelte";
+
 	import type { WeatherData } from "./../interface/WeatherData.interface";
-	import { parseTemperature } from "./../helpers/parseTemperature";
+
 	import { getWeatherData } from "../helpers/getWeatherData";
 
 	let weatherState: WeatherData;
@@ -33,20 +35,22 @@
 	});
 </script>
 
-<div class="weather-info">
-	{#if loading}
-		<div class="placeholder-title" />
-	{:else}
-		<h1>Current weather at {weatherState?.name ?? ""}</h1>
-	{/if}
-	<WeatherCards
-		humidity={weatherState?.main?.humidity}
-		{loading}
-		temp={weatherState?.main?.temp}
-		weather={weatherState?.weather[0]?.main}
-		wind={weatherState?.wind?.speed}
-	/>
-</div>
+<Animate>
+	<div class="weather-info">
+		{#if loading}
+			<div class="placeholder-title" />
+		{:else}
+			<h1 in:fly={{ duration: 400, y: -30 }}>Current weather at {weatherState?.name ?? ""}</h1>
+		{/if}
+		<WeatherCards
+			humidity={weatherState?.main?.humidity}
+			{loading}
+			temp={weatherState?.main?.temp}
+			weather={weatherState?.weather[0]?.main}
+			wind={weatherState?.wind?.speed}
+		/>
+	</div>
+</Animate>
 
 <style>
 	h1 {

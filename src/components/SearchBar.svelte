@@ -1,10 +1,7 @@
 <script>
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import { LOGONSERVER } from "$env/static/private";
-	import { createEventDispatcher } from "svelte";
 
-	const dispatch = createEventDispatcher();
+
 	let active = false;
 	let value = "";
 </script>

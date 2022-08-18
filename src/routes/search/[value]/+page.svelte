@@ -3,6 +3,7 @@
 
 	import Chart from "svelte-frappe-charts";
 	import WeatherCards from "../../../components/WeatherCards.svelte";
+	import Animate from "../../../components/Animate.svelte";
 
 	import { parseShortDate } from "../../../helpers/parseShortDate";
 	export let data: any;
@@ -26,15 +27,17 @@
 	};
 </script>
 
-<h1>
-	{data?.city ?? ""}
-</h1>
+<Animate>
+	<h1>
+		{data?.city ?? ""}
+	</h1>
 
-<WeatherCards {temp} {humidity} weather={weather[0]?.main} wind={wind.speed} />
-<h2>Temperature graph</h2>
-<div class="chart-wrapper">
-	<Chart data={chartData} type="line" colors={["#ff9500"]} lineOptions={{ dotSize: 6 }} />
-</div>
+	<WeatherCards {temp} {humidity} weather={weather[0]?.main} wind={wind.speed} />
+	<h2>Temperature graph</h2>
+	<div class="chart-wrapper">
+		<Chart data={chartData} type="line" colors={["#ff9500"]} lineOptions={{ dotSize: 6 }} />
+	</div>
+</Animate>
 
 <style>
 	h1 {

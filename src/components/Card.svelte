@@ -1,7 +1,16 @@
 <script lang="ts">
+	import { fly } from "svelte/transition";
+
 	export let title: string;
 	export let value: string | number;
-	export let loading: boolean = false;
+	export let loading = false;
+	export let delay = 100;
+
+	const fadeOptions = {
+		y: -30,
+		duration: 400,
+		delay
+	};
 </script>
 
 {#if loading}
@@ -17,7 +26,7 @@
 		</div>
 	</div>
 {:else}
-	<div class="card">
+	<div in:fly={fadeOptions} class="card">
 		<div class="svg-wrapper">
 			<slot name="icon" />
 		</div>
