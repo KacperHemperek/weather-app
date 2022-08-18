@@ -48,16 +48,4 @@
 		gap: 1rem;
 		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 	}
-
-	@media only screen and (min-width: 768px) {
-		.card-grid {
-			width: 80%;
-		}
-	}
-
-	@media only screen and (min-width: 1024px) {
-		.card-grid {
-			width: 60%;
-		}
-	}
 </style>

@@ -29,15 +29,16 @@
 <h1>
 	{data?.city ?? ""}
 </h1>
+
 <WeatherCards {temp} {humidity} weather={weather[0]?.main} wind={wind.speed} />
 <h2>Temperature graph</h2>
 <div class="chart-wrapper">
-	<Chart data={chartData} type="line" colors={["#ff9500"]} />
+	<Chart data={chartData} type="line" colors={["#ff9500"]} lineOptions={{ dotSize: 6 }} />
 </div>
 
 <style>
 	h1 {
-		font-size: 1.5rem;
+		font-size: 2rem;
 		margin: 2rem;
 	}
 
@@ -47,16 +48,6 @@
 	}
 
 	.chart-wrapper {
-		width: 100vw;
-	}
-	@media only screen and (min-width: 767px) {
-		.chart-wrapper {
-			width: 80vw;
-		}
-	}
-	@media only screen and (min-width: 1024px) {
-		.chart-wrapper {
-			width: 60vw;
-		}
+		width: 100%;
 	}
 </style>
