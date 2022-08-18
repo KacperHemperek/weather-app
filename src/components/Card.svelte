@@ -6,7 +6,7 @@
 	export let loading = false;
 	export let delay = 100;
 
-	const fadeOptions = {
+	const flyOptions = {
 		y: -30,
 		duration: 400,
 		delay
@@ -26,7 +26,7 @@
 		</div>
 	</div>
 {:else}
-	<div in:fly={fadeOptions} class="card">
+	<div in:fly={flyOptions} class="card">
 		<div class="svg-wrapper">
 			<slot name="icon" />
 		</div>

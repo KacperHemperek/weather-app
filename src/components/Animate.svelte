@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { fly } from "svelte/transition";
+
+	export let delay: number = 300;
 </script>
 
 <div class="layout-container">
 	<div
 		class="content-wrapper"
 		out:fly={{ duration: 300, x: -100 }}
-		in:fly={{ duration: 300, x: 100, delay: 300 }}
+		in:fly={{ duration: 300, x: 100, delay }}
 	>
 		<slot />
 	</div>

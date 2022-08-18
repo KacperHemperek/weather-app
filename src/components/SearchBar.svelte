@@ -1,13 +1,24 @@
 <script>
 	import { goto } from "$app/navigation";
+	import { onDestroy } from "svelte";
+	import { fly } from "svelte/transition";
 
+	import Spinner from "./Loader.svelte";
 
 	let active = false;
 	let value = "";
+	let loading = false;
+
+	onDestroy(() => {
+		loading = false;
+	});
+
+	const animation = { duration: 300, y: 20, delay: 500 };
 </script>
 
 <form
 	on:submit|preventDefault={() => {
+		loading = true;
 		goto(`search/${value}`);
 	}}
 >
@@ -21,12 +32,29 @@
 			bind:value
 		/>
 	</div>
+	{#if value}
+		<button
+			type="submit"
+			in:fly={{ duration: 300, y: 20, delay: 500 }}
+			out:fly={{ duration: 300, y: 20 }}>Search</button
+		>
+	{/if}
+	{#if loading}
+		<div class="svg-wrapper ">
+			<Spinner />
+		</div>
+	{/if}
 </form>
 
 <style>
+	.svg-wrapper {
+		fill: var(--bg-base);
+	}
 	form {
 		width: 100%;
 		display: flex;
+		flex-direction: column;
+		align-items: center;
 		margin-bottom: 1rem;
 		gap: 1rem;
 	}
@@ -34,7 +62,7 @@
 		width: 100%;
 		border-radius: var(--border-radius-base);
 		border: 1px solid;
-		padding: 0.4rem 0.75rem;
+		padding: 0.5rem 0.75rem;
 		border-color: var(--text-light);
 		background-color: white;
 	}
@@ -46,7 +74,7 @@
 	label {
 		background-color: white;
 		color: var(--text-light);
-		top: 8px;
+		top: 9px;
 		left: 0.75rem;
 		position: absolute;
 		transition: all 200ms ease-out;
@@ -73,5 +101,17 @@
 	}
 	input:focus {
 		outline-color: var(--bg-base);
+	}
+	button {
+		margin-top: 1rem;
+		width: fit-content;
+		padding: 0.5rem 2rem;
+		border: none;
+		background-color: var(--bg-base);
+		color: var(--text-white);
+		border-radius: var(--border-radius-base);
+	}
+	button:hover {
+		background-color: var(-bg-light);
 	}
 </style>
