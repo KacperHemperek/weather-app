@@ -5,7 +5,7 @@ import { getWeatherData } from "../../../helpers/getWeatherData";
 export const load: Load = async ({ params, fetch }) => {
 	try {
 		const coordsRes = await fetch(
-			`http://api.openweathermap.org/geo/1.0/direct?q=${params.value}&limit=5&appid=${
+			`http://api.openweathermap.org/geo/1.0/direct?q=${params.value}&limit=5&units=metric&appid=${
 				import.meta.env.VITE_API
 			}`
 		);
@@ -13,7 +13,7 @@ export const load: Load = async ({ params, fetch }) => {
 		const [lat, lon] = [coordsData[0].lat, coordsData[0].lon];
 
 		const weatherRes = await fetch(
-			`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${
+			`http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${
 				import.meta.env.VITE_API
 			}`
 		);

@@ -1,15 +1,29 @@
 <script lang="ts">
 	import type { WeatherData } from "../../../interface/WeatherData.interface";
 
+	import Chart from "svelte-frappe-charts";
 	import WeatherCards from "../../../components/WeatherCards.svelte";
+
+	import { parseShortDate } from "../../../helpers/parseShortDate";
 	export let data: any;
 
-	console.log(data);
 	const {
 		main: { temp, humidity },
 		wind,
 		weather
 	} = data.currentWeather as WeatherData;
+
+	const labels = data.fiveDayForecast.map((item: any) => parseShortDate(item.dt));
+	const values = data.fiveDayForecast.map((item: any) => Math.round(item.main.temp * 10) / 10);
+
+	let chartData = {
+		labels,
+		datasets: [
+			{
+				values
+			}
+		]
+	};
 </script>
 
 <h1>
@@ -17,6 +31,9 @@
 </h1>
 <WeatherCards {temp} {humidity} weather={weather[0]?.main} wind={wind.speed} />
 <h2>Temperature graph</h2>
+<div class="chart-wrapper">
+	<Chart data={chartData} type="line" colors={["#ff9500"]} />
+</div>
 
 <style>
 	h1 {
@@ -27,5 +44,19 @@
 	h2 {
 		font-size: 1.25rem;
 		margin: 2rem;
+	}
+
+	.chart-wrapper {
+		width: 100vw;
+	}
+	@media only screen and (min-width: 767px) {
+		.chart-wrapper {
+			width: 80vw;
+		}
+	}
+	@media only screen and (min-width: 1024px) {
+		.chart-wrapper {
+			width: 60vw;
+		}
 	}
 </style>
