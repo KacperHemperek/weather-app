@@ -1,17 +1,32 @@
 <script lang="ts">
 	export let title: string;
 	export let value: string | number;
+	export let loading: boolean = false;
 </script>
 
-<div class="card">
-	<div class="svg-wrapper">
-		<slot name="icon" />
+{#if loading}
+	<div class="card loading">
+		<div class="svg-wrapper loading">
+			<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="50" cy="50" r="50" />
+			</svg>
+		</div>
+		<div>
+			<div class="placeholder title" />
+			<div class="placeholder value" />
+		</div>
 	</div>
-	<div>
-		<h2>{title}</h2>
-		<p>{value}</p>
+{:else}
+	<div class="card">
+		<div class="svg-wrapper">
+			<slot name="icon" />
+		</div>
+		<div>
+			<h2>{title}</h2>
+			<p>{value}</p>
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.card {
@@ -22,7 +37,12 @@
 		align-items: center;
 		border: 1px solid;
 		border-color: var(--text-lighter);
-		border-radius: 0.5rem;
+		border-radius: var(--border-radius-base);
+	}
+
+	.card.loading {
+		background-color: var(--text-lighter);
+		box-shadow: none;
 	}
 	.svg-wrapper {
 		width: 2rem;
@@ -30,6 +50,19 @@
 		fill: var(--bg-base);
 		display: flex;
 		margin: 0 0.5rem;
+	}
+	.svg-wrapper.loading {
+		fill: var(--text-white) !important;
+	}
+	.placeholder {
+		background-color: var(--text-white);
+		width: 100px;
+		height: 10px;
+		border-radius: 10px;
+		margin: 8px;
+	}
+	.placeholder.value {
+		max-width: 40px !important;
 	}
 	h2 {
 		font-size: 0.75rem;

@@ -1,32 +1,22 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import Card from "./../components/Card.svelte";
 
+	import Card from "../components/Card.svelte";
+	import WeatherCards from "../components/WeatherCards.svelte";
 	import type { WeatherData } from "./../interface/WeatherData.interface";
 	import { parseTemperature } from "./../helpers/parseTemperature";
+	import { getWeatherData } from "../helpers/getWeatherData";
 
 	let weatherState: WeatherData;
-
-	const getWeatherData = async (lat: number = 52.2297, long: number = 21.0122) => {
-		try {
-			const res = await fetch(
-				`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&lang=en&appid=${
-					import.meta.env.VITE_API
-				}`
-			);
-			const weatherData = await res.json();
-			return weatherData;
-		} catch (err) {
-			console.log(err);
-			throw Error("couldn't retrive data'");
-		}
-	};
+	let loading: boolean = true;
 
 	onMount(() => {
+		loading = true;
 		navigator.geolocation.getCurrentPosition(
 			async (pos: GeolocationPosition) => {
 				try {
 					weatherState = await getWeatherData(pos.coords.latitude, pos.coords.longitude);
+					loading = false;
 				} catch (err) {
 					console.log(err);
 				}
@@ -34,6 +24,7 @@
 			async () => {
 				try {
 					weatherState = await getWeatherData();
+					loading = false;
 				} catch (err) {
 					console.log(err);
 				}
@@ -43,52 +34,38 @@
 </script>
 
 <div class="weather-info">
-	<h1>Current weather at {weatherState?.name ?? ""}</h1>
-	<div class="card-grid">
-		<Card title="Temperature" value={parseTemperature(weatherState?.main?.temp ?? 0)}>
-			<svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
-				><path
-					d="M176 322.9l.0002-114.9c0-8.75-7.25-16-16-16s-15.1 7.25-15.1 16L144 322.9c-18.62 6.625-32 24.25-32 45.13c0 26.5 21.5 48 48 48s48-21.5 48-48C208 347.1 194.6 329.5 176 322.9zM272 278.5V112c0-61.87-50.12-112-111.1-112S48 50.13 48 112v166.5c-19.75 24.75-32 55.5-32 89.5c0 79.5 64.5 143.1 144 143.1S304 447.5 304 368C304 334 291.8 303.1 272 278.5zM160 448c-44.13 0-80-35.87-80-79.1c0-25.5 12.25-48.88 32-63.75v-192.3c0-26.5 21.5-48 48-48s48 21.5 48 48v192.3c19.75 14.75 32 38.25 32 63.75C240 412.1 204.1 448 160 448z"
-				/>
-			</svg>
-		</Card>
-		<Card title="Humidity" value={`${weatherState?.main?.humidity ?? 0}%`}>
-			<svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-				<path
-					d="M16 319.1C16 245.9 118.3 89.43 166.9 19.3C179.2 1.585 204.8 1.585 217.1 19.3C265.7 89.43 368 245.9 368 319.1C368 417.2 289.2 496 192 496C94.8 496 16 417.2 16 319.1zM112 319.1C112 311.2 104.8 303.1 96 303.1C87.16 303.1 80 311.2 80 319.1C80 381.9 130.1 432 192 432C200.8 432 208 424.8 208 416C208 407.2 200.8 400 192 400C147.8 400 112 364.2 112 319.1z"
-				/>
-			</svg>
-		</Card>
-
-		<Card title="Pressure" value={weatherState?.main?.pressure + " hPa" ?? ""}>
-			<svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-				<path
-					d="M352 351.1h-71.25l47.44-105.4c3.062-6.781 1.031-14.81-4.906-19.31c-5.969-4.469-14.22-4.312-19.94 .4687l-153.6 128c-5.156 4.312-7.094 11.41-4.781 17.72c2.281 6.344 8.281 10.56 15.03 10.56h71.25l-47.44 105.4c-3.062 6.781-1.031 14.81 4.906 19.31C191.6 510.9 194.1 512 198.4 512c3.656 0 7.281-1.25 10.25-3.719l153.6-128c5.156-4.312 7.094-11.41 4.781-17.72C364.8 356.2 358.8 351.1 352 351.1zM416 128c-.625 0-1.125 .25-1.625 .25C415.5 123 416 117.6 416 112C416 67.75 380.3 32 336 32c-24.62 0-46.25 11.25-61 28.75C256.4 24.75 219.3 0 176 0C114.1 0 64 50.13 64 112c0 7.25 .75 14.25 2.125 21.25C27.75 145.8 0 181.5 0 224c0 53 43 96 96 96h46.63l140.2-116.8c8.605-7.195 19.53-11.16 30.76-11.16c10.34 0 20.6 3.416 29.03 9.734c17.96 13.61 24.02 37.45 14.76 57.95L330.2 320H416c53 0 96-43 96-96S469 128 416 128z"
-				/>
-			</svg>
-		</Card>
-
-		<Card title="Weather" value={weatherState?.weather[0]?.main ?? ""}>
-			<svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-				<path
-					d="M255.7 139.1C244.8 125.5 227.6 116 208 116c-33.14 0-60 26.86-60 59.1c0 25.56 16.06 47.24 38.58 55.88C197.2 219.3 210.5 208.9 225.9 201.1C229.1 178.5 240.6 157.3 255.7 139.1zM120 175.1c0-48.6 39.4-87.1 88-87.1c27.8 0 52.29 13.14 68.42 33.27c21.24-15.67 47.22-25.3 75.58-25.3c.0098 0-.0098 0 0 0L300.4 83.58L286.9 8.637C285.9 3.346 281.3 .0003 276.5 .0003c-2.027 0-4.096 .5928-5.955 1.881l-62.57 43.42L145.4 1.882C143.6 .5925 141.5-.0003 139.5-.0003c-4.818 0-9.399 3.346-10.35 8.636l-13.54 74.95L40.64 97.13c-5.289 .9556-8.637 5.538-8.637 10.36c0 2.026 .5921 4.094 1.881 5.951l43.41 62.57L33.88 238.6C32.59 240.4 32 242.5 32 244.5c0 4.817 3.347 9.398 8.636 10.35l74.95 13.54l13.54 74.95c.9555 5.289 5.537 8.636 10.35 8.636c2.027 0 4.096-.5927 5.954-1.882l19.47-13.51c-3.16-10.34-4.934-21.28-4.934-32.64c0-17.17 4.031-33.57 11.14-48.32C141 241.7 120 211.4 120 175.1zM542.5 225.5c-6.875-37.25-39.25-65.5-78.51-65.5c-12.25 0-23.88 3-34.25 8c-17.5-24.13-45.63-40-77.76-40c-53 0-96.01 43-96.01 96c0 .5 .25 1.125 .25 1.625C219.6 232.1 191.1 265.2 191.1 303.1c0 44.25 35.75 80 80.01 80h256C572.2 383.1 608 348.2 608 303.1C608 264.7 579.7 232.2 542.5 225.5zM552 415.1c-7.753 0-15.35 3.752-19.97 10.69l-32 48c-2.731 4.093-4.037 8.719-4.037 13.29C496 501.4 506.9 512 520 512c7.75 0 15.36-3.75 19.98-10.69l32-48c2.731-4.093 4.037-8.719 4.037-13.29C576 426.6 565.1 415.1 552 415.1zM456 415.1c-7.751 0-15.34 3.752-19.98 10.69l-32 48c-2.731 4.093-4.037 8.719-4.037 13.29C400 501.4 410.9 512 423.1 512c7.75 0 15.36-3.75 19.98-10.69l32-48c2.731-4.093 4.037-8.719 4.037-13.29C480 426.6 469.1 415.1 456 415.1zM360 415.1c-7.753 0-15.34 3.752-19.97 10.69l-32 48c-2.731 4.093-4.037 8.719-4.037 13.29C304 501.4 314.9 512 327.1 512c7.75 0 15.36-3.75 19.99-10.69l32-48c2.731-4.093 4.037-8.719 4.037-13.29C384 426.6 373.1 415.1 360 415.1zM264 415.1c-7.756 0-15.35 3.752-19.97 10.69l-32 48c-2.731 4.093-4.037 8.719-4.037 13.29C208 501.4 218.9 512 231.1 512c7.75 0 15.36-3.75 19.98-10.69l32-48c2.731-4.093 4.037-8.719 4.037-13.29C288 426.6 277.1 415.1 264 415.1z"
-				/>
-			</svg>
-		</Card>
-		<Card title="Wind" value={weatherState?.wind?.speed + " km/h" ?? 0}>
-			<svg slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-				<path
-					d="M32 192h320c52.94 0 96-43.06 96-96s-43.06-96-96-96h-32c-17.69 0-32 14.31-32 32s14.31 32 32 32h32c17.66 0 32 14.34 32 32s-14.34 32-32 32H32C14.31 128 0 142.3 0 160S14.31 192 32 192zM160 320H32c-17.69 0-32 14.31-32 32s14.31 32 32 32h128c17.66 0 32 14.34 32 32s-14.34 32-32 32H128c-17.69 0-32 14.31-32 32s14.31 32 32 32h32c52.94 0 96-43.06 96-96S212.9 320 160 320zM416 224H32C14.31 224 0 238.3 0 256s14.31 32 32 32h384c17.66 0 32 14.34 32 32s-14.34 32-32 32h-32c-17.69 0-32 14.31-32 32s14.31 32 32 32h32c52.94 0 96-43.06 96-96S468.9 224 416 224z"
-				/>
-			</svg>
-		</Card>
-	</div>
+	{#if loading}
+		<div class="placeholder-title" />
+	{:else}
+		<h1>Current weather at {weatherState?.name ?? ""}</h1>
+	{/if}
+	<WeatherCards
+		humidity={weatherState?.main?.humidity}
+		{loading}
+		temp={weatherState?.main?.temp}
+		weather={weatherState?.weather[0]?.main}
+		wind={weatherState?.wind?.speed}
+	/>
 </div>
 
 <style>
 	h1 {
 		font-size: 1.75rem;
-		margin: 1rem 0;
+		margin: 3rem 0;
+	}
+
+	.placeholder-title {
+		margin: 3rem 0;
+		width: 100%;
+		height: 42px;
+		background-color: var(--text-lighter);
+		border-radius: 30px;
+	}
+
+	@media only screen and (min-width: 767px) {
+		.placeholder-title {
+			width: 400px;
+		}
 	}
 
 	svg {
@@ -97,23 +74,11 @@
 	}
 
 	.weather-info {
-		width: 80vw;
+		width: 100%;
 		margin: 0.5rem;
-		min-width: 280px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
-	}
-	@media only screen and (min-width: 1080px) {
-		.weather-info {
-			width: 60vw;
-		}
-	}
-	.card-grid {
-		width: 100%;
-		display: grid;
-		gap: 1rem;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	}
 </style>
